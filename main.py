@@ -14,17 +14,37 @@ init(autoreset=True)
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
-logo = f"""{Fore.CYAN}
- ██████████                 █████                        █████   ████  ███   █████   
-░░███░░░░░█                ░░███                        ░░███   ███░  ░░░   ░░███    
- ░███  █ ░  █████████████   ░███████   ██████  ████████  ░███  ███    ████  ███████  
- ░██████   ░░███░░███░░███  ░███░░███ ███░░███░░███░░███ ░███████    ░░███ ░░░███░   
- ░███░░█    ░███ ░███ ░███  ░███ ░███░███████  ░███ ░░░  ░███░░███    ░███   ░███    
- ░███ ░   █ ░███ ░███ ░███  ░███ ░███░███░░░   ░███      ░███ ░░███   ░███   ░███ ███
- ██████████ █████░███ █████ ████████ ░░██████  █████     █████ ░░████ █████  ░░█████ 
-░░░░░░░░░░ ░░░░░ ░░░ ░░░░░ ░░░░░░░░   ░░░░░░  ░░░░░     ░░░░░   ░░░░ ░░░░░    ░░░░░                                                                                 
-{Style.RESET_ALL}
-"""
+def rgb_to_ansi_256(r, g, b):
+    r_idx = round(r / 255 * 5)
+    g_idx = round(g / 255 * 5)
+    b_idx = round(b / 255 * 5)
+    color = 16 + 36 * r_idx + 6 * g_idx + b_idx
+    return f'\033[38;5;{color}m'
+
+def get_logo():
+    logo_lines = [
+        " ██████████                 █████                        █████   ████  ███   █████   ",
+        "░░███░░░░░█                ░░███                        ░░███   ███░  ░░░   ░░███    ",
+        " ░███  █ ░  █████████████   ░███████   ██████  ████████  ░███  ███    ████  ███████  ",
+        " ░██████   ░░███░░███░░███  ░███░░███ ███░░███░░███░░███ ░███████    ░░███ ░░░███░   ",
+        " ░███░░█    ░███ ░███ ░███  ░███ ░███░███████  ░███ ░░░  ░███░░███    ░███   ░███    ",
+        " ░███ ░   █ ░███ ░███ ░███  ░███ ░███░███░░░   ░███      ░███ ░░███   ░███   ░███ ███",
+        " ██████████ █████░███ █████ ████████ ░░██████  █████     █████ ░░████ █████  ░░█████ ",
+        "░░░░░░░░░░ ░░░░░ ░░░ ░░░░░ ░░░░░░░░   ░░░░░░  ░░░░░     ░░░░░   ░░░░ ░░░░░    ░░░░░",
+    ]
+
+    start_rgb = (173, 216, 230)
+    end_rgb = (255, 50, 50)
+
+    result = "\n"
+    for i, line in enumerate(logo_lines):
+        t = i / (len(logo_lines) - 1)
+        r = int(start_rgb[0] + (end_rgb[0] - start_rgb[0]) * t)
+        g = int(start_rgb[1] + (end_rgb[1] - start_rgb[1]) * t)
+        b = int(start_rgb[2] + (end_rgb[2] - start_rgb[2]) * t)
+        result += rgb_to_ansi_256(r, g, b) + line + "\n"
+    result += Style.RESET_ALL
+    return result
 
 def auto_detect_network():
     gws = netifaces.gateways()
@@ -57,7 +77,6 @@ def scan(network):
         })
 
     return devices
-
 
 def print_devices(devices):
     print(Fore.GREEN + "\n--- Devices Found ---\n")
@@ -99,7 +118,7 @@ def find_keywords_case_insensitive(file_path, keyword):
     with open(file_path, 'r', encoding='utf-8') as f:
         for line_number, line in enumerate(f, start=1):
             if keyword_lower in line.lower():
-                print(f"{line_number}: {line.strip()}") 
+                print(f"{line_number}: {line.strip()}")
 
 def ping_host():
     host = input(Fore.YELLOW + "Enter host to ping: ")
@@ -112,7 +131,7 @@ def ping_host():
 def main():
     while True:
         clear()
-        print(logo)
+        print(get_logo())
 
         print(Fore.BLUE + "--- Options ---")
         print(Fore.CYAN + "1: Scan LAN")
