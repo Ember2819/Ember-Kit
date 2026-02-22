@@ -1,0 +1,5 @@
+scapy
+requests
+colorama
+netifaces
+ping3
