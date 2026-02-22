@@ -85,18 +85,6 @@ header p {
     transform: translateY(-5px);
 }
 
-.features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-top: 20px;
-}
-
-/* Center cards in the last row when they don't fill all columns */
-.features::after {
-    content: "";
-}
-
 .features-inner {
     display: flex;
     flex-wrap: wrap;
@@ -143,9 +131,15 @@ header p {
     margin: 10px 0;
 }
 
+.btn-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
 .btn {
     display: inline-block;
-    margin-top: 20px;
     padding: 12px 25px;
     border-radius: 30px;
     background: linear-gradient(90deg, #ff6a00, #ee0979);
@@ -160,9 +154,19 @@ header p {
     transform: translateY(-2px);
 }
 
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
 footer {
     text-align: center;
-    padding: 20px;
+    padding: 40px 20px;
     margin-top: auto;
     opacity: 0.6;
     font-size: 0.9rem;
@@ -175,7 +179,6 @@ footer {
 <header>
     <h1>Emberkit</h1>
     <p>Python-Based Cybersecurity Utility • Network Utility</p>
-    <a href="#install" class="btn">Get Started</a>
 </header>
 
 <div class="container">
@@ -190,38 +193,31 @@ footer {
     <div class="section glass">
         <h2>Features</h2>
         <div class="features-inner">
-
             <div class="feature-card glass">
                 <h3>LAN Scanner</h3>
                 <p>Automatically detects your local network and lists IP + MAC addresses of connected devices.</p>
             </div>
-
             <div class="feature-card glass">
                 <h3>IP Geolocation</h3>
                 <p>Returns ISP, location, and country information for an inputted IP address.</p>
             </div>
-
             <div class="feature-card glass">
                 <h3>Keyword File Searcher</h3>
                 <p>Search files for specified keywords in a file.</p>
             </div>
-
             <div class="feature-card glass">
                 <h3>Ping Utility</h3>
                 <p>Check if a device is online by pinging its IP address.</p>
             </div>
-
             <div class="feature-card glass">
                 <h3>Hash Tools</h3>
                 <p>Crack MD5, SHA1, and SHA256 hashes using a wordlist.</p>
             </div>
-
         </div>
     </div>
 
     <div id="install" class="section glass">
         <h2>Installation</h2>
-
         <p style="margin-top:15px;"><strong>Prerequisites:</strong> Python 3 & Pip 3</p>
 
         <h3 style="margin-top:20px;">MacOS / Linux</h3>
@@ -236,10 +232,17 @@ footer {
 pip install -r requirements.txt  
 python main.py
         </div>
+    </div>
 
+    <div class="section glass">
+        <h2>Connect & Contribute</h2>
         <p style="margin-top:15px; opacity:0.8;">
-            Windows support is experimental. Contributions welcome. Contact info at ember2819.github.io/ember2819-porfolio
+            Windows support is experimental. Contributions are welcome on GitHub.
         </p>
+        <div class="btn-container">
+            <a href="https://ember2819.github.io/ember2819-portfolio" class="btn" target="_blank">View My Portfolio</a>
+            <a href="https://github.com/Ember2819/Ember-Kit" class="btn btn-secondary" target="_blank">View GitHub Repo</a>
+        </div>
     </div>
 
 </div>
