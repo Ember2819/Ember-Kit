@@ -87,14 +87,28 @@ header p {
 
 .features {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 25px;
     margin-top: 20px;
+}
+
+/* Center cards in the last row when they don't fill all columns */
+.features::after {
+    content: "";
+}
+
+.features-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-top: 20px;
+    justify-content: center;
 }
 
 .feature-card {
     padding: 25px;
     transition: 0.3s ease;
+    flex: 0 1 300px;
 }
 
 .feature-card:hover {
@@ -120,6 +134,13 @@ header p {
     margin: 10px 0;
     overflow-x: auto;
     font-size: 0.9rem;
+}
+
+.cmd-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0;
 }
 
 .btn {
@@ -168,7 +189,7 @@ footer {
 
     <div class="section glass">
         <h2>Features</h2>
-        <div class="features">
+        <div class="features-inner">
 
             <div class="feature-card glass">
                 <h3>LAN Scanner</h3>
@@ -194,6 +215,7 @@ footer {
                 <h3>Hash Tools</h3>
                 <p>Crack MD5, SHA1, and SHA256 hashes using a wordlist.</p>
             </div>
+
         </div>
     </div>
 
@@ -203,10 +225,10 @@ footer {
         <p style="margin-top:15px;"><strong>Prerequisites:</strong> Python 3 & Pip 3</p>
 
         <h3 style="margin-top:20px;">MacOS / Linux</h3>
-        <div class="code">
-cd /path/to/folder  
-pip3 install -r requirements.txt  
-sudo python3 main.py
+        <div class="cmd-group">
+            <div class="code">cd /path/to/folder</div>
+            <div class="code">pip3 install -r requirements.txt</div>
+            <div class="code">sudo python3 main.py</div>
         </div>
 
         <h3 style="margin-top:20px;">Windows</h3>
@@ -216,14 +238,11 @@ python main.py
         </div>
 
         <p style="margin-top:15px; opacity:0.8;">
-            Windows support is experimental. Contributions welcome. Contact info at ember2819.github.io/ember2819-profile
+            Windows support is experimental. Contributions welcome. Contact info at ember2819.github.io/ember2819-porfolio
         </p>
     </div>
 
 </div>
-
-</body>
-</html>
 
 </body>
 </html>
