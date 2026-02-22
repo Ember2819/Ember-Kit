@@ -57,3 +57,6 @@ Similar to `grep`. Accepts a file path and searches it for specified keywords.
 
 ### 4. Ping
 Pings a given IP address to determine whether it is currently **online or offline**.
+
+### 5. Hash Tools
+Uses a dictionary attack from a custom wordlist to crack multiple different types of password hashes.
