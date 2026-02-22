@@ -1,5 +1,6 @@
 import requests
 import os
+import hash_tools
 import json
 import time
 import ipaddress
@@ -118,7 +119,8 @@ def main():
         print(Fore.CYAN + "2: IP Geolocation")
         print(Fore.CYAN + "3: Find Keywords")
         print(Fore.CYAN + "4: Ping a Host")
-        print(Fore.CYAN + "5: Exit")
+        print(Fore.CYAN + "5: Hash Tools")
+        print(Fore.CYAN + "6: Exit")
 
         choice = input(Fore.YELLOW + "\nSelect an option: ")
 
@@ -161,6 +163,10 @@ def main():
             input(Fore.YELLOW + "\nPress Enter to return to menu...")
 
         elif choice == "5":
+            hash_tools.run_hash_cracker()
+            input(Fore.YELLOW + "\nPress Enter to return to menu...")
+
+        elif choice == "6":
             print(Fore.GREEN + "Goodbye.")
             break
 
