@@ -5,7 +5,7 @@ import json
 import time
 import ipaddress
 import netifaces
-import MITM
+from MITM import *
 from scapy.all import ARP, Ether, srp
 from colorama import Fore, Style, init
 from ping3 import ping
