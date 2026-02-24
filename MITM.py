@@ -106,5 +106,3 @@ def mitm():
         send(ARP(op=2, pdst=conf["v_ip"], psrc=conf["r_ip"], hwdst="ff:ff:ff:ff:ff:ff", hwsrc=r_mac), count=5, verbose=False)
         set_ip_forwarding(False)
         print("~~~ [5] Clean Exit Successful.")
-
-mitm()
