@@ -1,6 +1,7 @@
 # Emberkit Cybersecurity Utility
 ## https://ember2819.github.io/Ember-Kit/
 A Python-based cybersecurity utility featuring several network tools, with more features on the way.
+This program is for educational purposes only. DO NOT do anything illegal. I'm not responsible for anything you do with this script.
 
 ---
 
@@ -60,3 +61,6 @@ Pings a given IP address to determine whether it is currently **online or offlin
 
 ### 5. Hash Tools
 Uses a dictionary attack from a custom wordlist to crack multiple different types of password hashes.
+
+### 6. Man in the Middle Attack
+This is an advanced tool that uses ARP spoofing to execute a Man in the Middle Attack. You will need the victims IP and the routers IP. This script is for educational purposes only don't do anything illegal.
