@@ -5,6 +5,7 @@ import json
 import time
 import ipaddress
 import netifaces
+import MITM
 from scapy.all import ARP, Ether, srp
 from colorama import Fore, Style, init
 from ping3 import ping
@@ -139,7 +140,8 @@ def main():
         print(Fore.CYAN + "3: Find Keywords")
         print(Fore.CYAN + "4: Ping a Host")
         print(Fore.CYAN + "5: Hash Tools")
-        print(Fore.CYAN + "6: Exit")
+        print(Fore.CYAN + "6: Man In The Middle Attack")
+        print(Fore.CYAN + "7: Exit")
 
         choice = input(Fore.YELLOW + "\nSelect an option: ")
 
@@ -186,6 +188,11 @@ def main():
             input(Fore.YELLOW + "\nPress Enter to return to menu...")
 
         elif choice == "6":
+            print("Starting MITM Attack Interface..")
+            time.sleep(1)
+            mitm()
+        
+        elif choice == "7":
             print(Fore.GREEN + "Goodbye.")
             break
 
