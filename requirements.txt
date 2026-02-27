@@ -3,3 +3,6 @@ requests
 colorama
 netifaces
 ping3
+beautifulsoup4
+rich
+aiohttp
