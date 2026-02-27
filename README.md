@@ -2,6 +2,7 @@
 ## https://ember2819.github.io/Ember-Kit/
 A Python-based cybersecurity utility featuring several network tools, with more features on the way.
 This program is for educational purposes only. DO NOT do anything illegal. I'm not responsible for anything you do with this script.
+Contributions are welcome! Any features you can think of please get in touch or make them yourself!
 
 ---
 
@@ -64,3 +65,7 @@ Uses a dictionary attack from a custom wordlist to crack multiple different type
 
 ### 6. Man in the Middle Attack
 This is an advanced tool that uses ARP spoofing to execute a Man in the Middle Attack. You will need the victims IP and the routers IP. This script is for educational purposes only don't do anything illegal.
+
+### 7. Socials Sniper
+This is an advanced username lookup tool that finds accounts with a given username across 50+ platforms
+
