@@ -9,6 +9,7 @@ from MITM import *
 from scapy.all import ARP, Ether, srp
 from colorama import Fore, Style, init
 from ping3 import ping
+from socials_sniper import *
 
 init(autoreset=True)
 
@@ -141,7 +142,8 @@ def main():
         print(Fore.CYAN + "4: Ping a Host")
         print(Fore.CYAN + "5: Hash Tools")
         print(Fore.CYAN + "6: Man In The Middle Attack")
-        print(Fore.CYAN + "7: Exit")
+        print(Fore.CYAN + "7: Social Media Sniper")
+        print(Fore.CYAN + "8: Exit")
 
         choice = input(Fore.YELLOW + "\nSelect an option: ")
 
@@ -193,6 +195,10 @@ def main():
             mitm()
         
         elif choice == "7":
+            socialsSniper()
+            break
+
+        elif choice == "8":
             print(Fore.GREEN + "Goodbye.")
             break
 
